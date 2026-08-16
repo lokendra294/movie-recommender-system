@@ -2,6 +2,7 @@ import streamlit as st
 import pickle
 import pandas as pd
 import requests
+from huggingface_hub import hf_hub_download
 
 st.title('Movie Recommender System')
 
@@ -13,6 +14,8 @@ def fetch_poster(movie_id):
 
 def recommend(movie):
     movie_index = movies[movies['title'] == movie].index[0]
+    similarity_path = hf_hub_download(repo_id ="lokendra294/movie_recommender_system_data",filename = "similarity.pkl")
+    similarity = pickle.load(open(similarity_path,'rb'))
     distances = similarity[movie_index]
     movies_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
 
